@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Manager App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="landing" id="landingPage">
+    <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" alt="App Logo">
+    <h1>Welcome to Task Manager</h1>
+    <p>Organize your goals and track progress easily</p>
+    <button onclick="startApp()">Start</button>
+  </div>
+
+  <div class="app" id="taskApp">
+    <div class="task-box">
+      <h1>Task Manager</h1>
+      <input type="text" id="taskInput" placeholder="Enter a task">
+      <input type="date" id="dateInput">
+      <select id="categoryInput">
+        <option>General</option>
+        <option>Work</option>
+        <option>Study</option>
+        <option>Personal</option>
+      </select>
+      <br>
+      <button class="add-btn" onclick="addTask()">Add Task</button>
+      <br>
+      <input type="text" id="searchInput" placeholder="Search task">
+      <select id="filterInput" onchange="renderTasks()">
+        <option value="all">All</option>
+        <option value="completed">Completed</option>
+        <option value="pending">Pending</option>
+      </select>
+      <button class="clear-btn" onclick="clearCompleted()">Clear Completed</button>
+      <ul id="taskList"></ul>
+      <div class="progress" id="progress"></div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
