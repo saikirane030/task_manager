@@ -14,30 +14,30 @@
   </div>
 
   <div class="app" id="taskApp">
-    <div class="task-box">
-      <h1>Task Manager</h1>
-      <input type="text" id="taskInput" placeholder="Enter a task">
-      <input type="date" id="dateInput">
-      <select id="categoryInput">
-        <option>General</option>
-        <option>Work</option>
-        <option>Study</option>
-        <option>Personal</option>
-      </select>
-      <br>
-      <button class="add-btn" onclick="addTask()">Add Task</button>
-      <br>
-      <input type="text" id="searchInput" placeholder="Search task">
-      <select id="filterInput" onchange="renderTasks()">
-        <option value="all">All</option>
-        <option value="completed">Completed</option>
-        <option value="pending">Pending</option>
-      </select>
-      <button class="clear-btn" onclick="clearCompleted()">Clear Completed</button>
-      <ul id="taskList"></ul>
-      <div class="progress" id="progress"></div>
-    </div>
+    <h1>Task Manager</h1>
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <input type="date" id="dateInput">
+    <input type="time" id="timeInput">
+    <select id="categoryInput">
+      <option>General</option>
+      <option>Work</option>
+      <option>Study</option>
+      <option>Personal</option>
+    </select>
+    <br>
+    <button class="add-btn" onclick="addTask()">Add Task</button>
+    <br>
+    <input type="text" id="searchInput" placeholder="Search task">
+    <select id="filterInput" onchange="renderTasks()">
+      <option value="all">All</option>
+      <option value="completed">Completed</option>
+      <option value="pending">Pending</option>
+    </select>
+    <button class="clear-btn" onclick="clearCompleted()">Clear Completed</button>
+    <ul id="taskList"></ul>
+    <div class="progress" id="progress"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
