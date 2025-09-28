@@ -1,65 +1,75 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let tasks = [];
+let showApp = false;
 
 function startApp() {
-  document.getElementById("landingPage").style.display = "none";
-  document.getElementById("taskApp").style.display = "block";
-  renderTasks();
+  document.getElementById('landingPage').style.display = 'none';
+  document.getElementById('taskApp').style.display = 'block';
 }
 
 function addTask() {
-  const text = document.getElementById("taskInput").value.trim();
-  const date = document.getElementById("dateInput").value;
-  const category = document.getElementById("categoryInput").value;
-  if (text === "") return alert("Enter a task!");
-  tasks.push({ text, date, category, completed: false });
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  document.getElementById("taskInput").value = "";
-  document.getElementById("dateInput").value = "";
+  const taskInput = document.getElementById('taskInput');
+  const dateInput = document.getElementById('dateInput');
+  const timeInput = document.getElementById('timeInput');
+  const categoryInput = document.getElementById('categoryInput');
+  const task = taskInput.value.trim();
+  if (!task) return;
+  tasks.push({
+    text: task,
+    date: dateInput.value,
+    time: timeInput.value,
+    category: categoryInput.value,
+    completed: false
+  });
+  taskInput.value = '';
+  dateInput.value = '';
+  timeInput.value = '';
   renderTasks();
 }
 
-function toggleTask(index) {
-  tasks[index].completed = !tasks[index].completed;
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+function renderTasks() {
+  const list = document.getElementById('taskList');
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filter = document.getElementById('filterInput').value;
+  list.innerHTML = '';
+  let filtered = tasks.filter(t => t.text.toLowerCase().includes(search));
+  if (filter === 'completed') filtered = filtered.filter(t => t.completed);
+  if (filter === 'pending') filtered = filtered.filter(t => !t.completed);
+  filtered.forEach((t, i) => {
+    const li = document.createElement('li');
+    li.className = t.completed ? 'completed' : '';
+    li.innerHTML = `<span onclick="toggleTask(${i})">${t.text} (${t.category}${t.date ? ', ' + t.date : ''}${t.time ? ', ' + t.time : ''})</span> <button onclick="deleteTask(${i})">Delete</button>`;
+    list.appendChild(li);
+  });
+  updateProgress();
+}
+
+function toggleTask(i) {
+  tasks[i].completed = !tasks[i].completed;
+  renderTasks();
+}
+
+function deleteTask(i) {
+  tasks.splice(i, 1);
   renderTasks();
 }
 
 function clearCompleted() {
   tasks = tasks.filter(t => !t.completed);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
   renderTasks();
 }
 
-function renderTasks() {
-  const search = document.getElementById("searchInput").value.toLowerCase();
-  const filter = document.getElementById("filterInput").value;
-  const taskList = document.getElementById("taskList");
-  taskList.innerHTML = "";
-  let completedCount = 0;
-  tasks.forEach((task, i) => {
-    if (filter === "completed" && !task.completed) return;
-    if (filter === "pending" && task.completed) return;
-    if (!task.text.toLowerCase().includes(search)) return;
-    const li = document.createElement("li");
-    li.className = task.completed ? "completed" : "";
-    li.innerHTML = `
-      <span>
-        ${task.text} 
-        <small>(${task.category}, ${task.date || "No deadline"})</small>
-      </span>
-      <button onclick="toggleTask(${i})">
-        ${task.completed ? "Undo" : "Done"}
-      </button>
-    `;
-    taskList.appendChild(li);
-    if (task.completed) completedCount++;
-  });
-  const total = tasks.length;
-  const percent = total ? Math.round((completedCount / total) * 100) : 0;
-  document.getElementById("progress").innerHTML = `
-    <div class="progress-text">${completedCount} of ${total} tasks completed (${percent}%)</div>
-    <div class="progress-bar">
-      <div class="progress-fill" style="width:${percent}%;"></div>
-    </div>
-  `;
+function updateProgress() {
+  const progress = document.getElementById('progress');
+  if (!tasks.length) {
+    progress.textContent = '';
+    return;
+  }
+  const completed = tasks.filter(t => t.completed).length;
+  progress.textContent = `Completed: ${completed} / ${tasks.length}`;
 }
+
+window.onload = function() {
+  document.getElementById('taskApp').style.display = 'none';
+  renderTasks();
+  document.getElementById('searchInput').addEventListener('input', renderTasks);
+};
